@@ -1,0 +1,119 @@
+package solu.kitt.aoc2022;
+import java.io.*;
+import java.util.*;
+
+public class DayTwo {
+
+	public static void main(String[] args) {
+
+		List<Character> opponent = new ArrayList<>();
+		List<Character> response = new ArrayList<>();
+
+		try {  
+			File file = new File("C:\\AoC 22\\inputDay2.txt");
+			FileReader filereader = new FileReader(file);
+			BufferedReader bufferedreader = new BufferedReader(filereader);
+			String line;  
+			while((line = bufferedreader.readLine()) != null) {  
+				opponent.add(line.charAt(0));
+				response.add(line.charAt(2));
+			}
+			filereader.close();
+		} catch(IOException e) { 
+			e.printStackTrace();
+		}
+		
+
+		/*
+		 * A is for Rock X
+		 * B for Paper Y
+		 * C for Scissor Z
+		 * 
+		 *  1 point for Rock
+		 *  2 point for Paper
+		 *  3 point for Scissor
+		 *  
+		 *  + outcome of round
+		 *  0 point if you lost
+		 *  3 point if it was a draw
+		 *  6 point if you won 
+		 */
+		
+		int points = 0;
+		for(int i = 0; i < opponent.size(); i++) {
+			if(response.get(i) == 'X') {
+				points = points + 1;
+				if(opponent.get(i) == 'A')
+					points = points + 3;
+				else if(opponent.get(i) == 'C')
+					points = points + 6;
+			}
+			if(response.get(i) == 'Y') {
+				points = points + 2;
+				if(opponent.get(i) == 'A')
+					points = points + 6;
+				else if(opponent.get(i) == 'B')
+					points = points + 3;
+			}
+			if(response.get(i) == 'Z') {
+				points = points + 3;
+				if(opponent.get(i) == 'B')
+					points = points + 6;
+				else if(opponent.get(i) == 'C')
+					points = points + 3;
+			}
+		}
+		System.out.println("part 1 points: " + points);
+		
+		/*
+		 * X is for lose
+		 * Y is for draw
+		 * Z is for win
+		 * 
+		 * A is for Rock 	
+		 * B for Paper 
+		 * C for Scissor 
+		 * 
+		 * 1 point for Rock
+		 * 2 point for Paper
+		 * 3 point for Scissor
+		 *  
+		 * + outcome of round
+		 * 0 point if you lost
+		 * 3 point if it was a draw
+		 * 6 point if you won 
+		 */
+		
+		
+		int pointsNew = 0;
+		for(int i = 0; i < opponent.size(); i++) {
+			if(response.get(i) == 'X') {
+				if(opponent.get(i) == 'A')
+					pointsNew = pointsNew + 3;
+				else if(opponent.get(i) == 'B')
+					pointsNew = pointsNew + 1;
+				else 
+					pointsNew = pointsNew + 2;
+			}
+			if(response.get(i) == 'Y') {
+				if(opponent.get(i) == 'A')
+					pointsNew = pointsNew + 1 + 3;
+				else if(opponent.get(i) == 'B')
+					pointsNew = pointsNew + 2 + 3;
+				else 
+					pointsNew = pointsNew + 3 + 3;
+			}
+			if(response.get(i) == 'Z') {
+				if(opponent.get(i) == 'A')
+					pointsNew = pointsNew + 2 + 6;
+				else if(opponent.get(i) == 'B')
+					pointsNew = pointsNew + 3 + 6;
+				else 
+					pointsNew = pointsNew + 1 + 6; 
+			}
+		}
+		System.out.println("part 2 points: " + pointsNew);
+		
+		
+	}
+}
