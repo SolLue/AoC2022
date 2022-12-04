@@ -1,0 +1,80 @@
+package solu.kitt.aoc2022;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DayFour {
+	public static void main(String[] args) {
+
+		List<String> pair = new ArrayList<>();
+
+		try {  
+			File file = new File("C:\\AoC 22\\inputDay4.txt");
+			FileReader filereader = new FileReader(file);
+			BufferedReader bufferedreader = new BufferedReader(filereader);
+			String line;  
+			while((line = bufferedreader.readLine()) != null) {  
+				pair.add(line);
+			}
+			filereader.close();
+		} catch(IOException e) { 
+			e.printStackTrace();
+		}
+		
+		/*
+		 *  every section has a unique ID number
+		 *  each elf is assigned a range of section IDs
+		 *  some contain the other elfs range completely eg: 2-8 contains fully 3-7 
+		 *  and 6-6 is fully contained by 4-6
+		 *  only in pair, 1 line: 2 ranges -> 1 pair
+		 * 
+		 */
+
+		int counter = 0;
+		for(int i = 0; i < pair.size(); i++) {
+			String first = pair.get(i).substring(0,pair.get(i).indexOf(','));
+			String last = pair.get(i).substring(pair.get(i).indexOf(',')+1,pair.get(i).length());
+							
+			int firstStart = Integer.parseInt(first.substring(0,first.indexOf('-')));
+			int firstEnd = Integer.parseInt(first.substring(first.indexOf('-')+1,first.length()));
+			int lastStart = Integer.parseInt(last.substring(0,last.indexOf('-')));
+			int lastEnd = Integer.parseInt(last.substring(last.indexOf('-')+1,last.length()));
+			
+			if(firstStart >= lastStart && firstEnd <= lastEnd) {
+				counter++;
+			} else if(lastStart >= firstStart && lastEnd <= firstEnd) {
+				counter++;					
+			}
+		}
+		System.out.println("amount of fully containing pairs: " + counter);
+
+		/*
+		 * numbers of pairs that overlap at all
+		 */
+		
+		int counterNew = 0;
+		for(int i = 0; i < pair.size(); i++) {
+			String first = pair.get(i).substring(0,pair.get(i).indexOf(','));
+			String last = pair.get(i).substring(pair.get(i).indexOf(',')+1,pair.get(i).length());
+			
+			int firstStart = Integer.parseInt(first.substring(0,first.indexOf('-')));
+			int firstEnd = Integer.parseInt(first.substring(first.indexOf('-')+1,first.length()));
+			int lastStart = Integer.parseInt(last.substring(0,last.indexOf('-')));
+			int lastEnd = Integer.parseInt(last.substring(last.indexOf('-')+1,last.length()));
+		
+			if((firstStart >= lastStart && firstStart <= lastEnd) || (firstEnd <= lastEnd && firstEnd >= lastStart)) {
+				counterNew++;
+			} else if(firstStart >= lastStart && firstEnd <= lastEnd) {
+				counterNew++;
+			} else if(lastStart >= firstStart && lastEnd <= firstEnd) {
+				counterNew++;					
+			} 
+		}
+		System.out.println("amount of overlapping pairs: " + counterNew);
+
+	}
+}
