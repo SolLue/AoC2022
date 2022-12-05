@@ -1,0 +1,151 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+public class DayFive {
+	public static void main(String[] args) {
+		List<String> crates = new ArrayList<>();
+		List<String> instructions = new ArrayList<>();	
+		try {  
+			File file = new File("C:\\AoC 22\\inputDay5.txt");
+			FileReader filereader = new FileReader(file);
+			BufferedReader bufferedreader = new BufferedReader(filereader);
+			String line;  
+			while((line = bufferedreader.readLine()) != null) {  
+				if(line.contains("move"))
+					instructions.add(line);
+				else
+					crates.add(line);
+			}
+			filereader.close();
+		} catch(IOException e) { 
+			e.printStackTrace();
+		}
+		List<Stack<Character>> stackList = new ArrayList<>();
+		Stack<Character> one = new Stack<>();
+		Stack<Character> two = new Stack<>();
+		Stack<Character> three = new Stack<>();
+		Stack<Character> four = new Stack<>();
+		Stack<Character> five = new Stack<>();
+		Stack<Character> six = new Stack<>();
+		Stack<Character> seven = new Stack<>();
+		Stack<Character> eight = new Stack<>();
+		Stack<Character> nine = new Stack<>();
+		stackList.add(one);
+		stackList.add(two);
+		stackList.add(three);
+		stackList.add(four);
+		stackList.add(five);
+		stackList.add(six);
+		stackList.add(seven);
+		stackList.add(eight);
+		stackList.add(nine);
+		
+		for(int i = crates.size()-1; i >= 0; i--) {
+			String temp = crates.get(i);
+			for(int j = 0; j <= temp.length()-1; j++) {
+				if(Character.isAlphabetic(temp.charAt(j)) && !Character.isDigit(temp.charAt(j))) {
+					if(j == 1)
+						one.push(temp.charAt(j));
+					else if(j == 5)
+						two.push(temp.charAt(j));
+					else if(j == 9)
+						three.push(temp.charAt(j));
+					else if(j == 13)
+						four.push(temp.charAt(j));
+					else if(j == 17)
+						five.push(temp.charAt(j));
+					else if(j == 21)
+						six.push(temp.charAt(j));
+					else if(j == 25)
+						seven.push(temp.charAt(j));
+					else if(j == 29)
+						eight.push(temp.charAt(j));
+					else if(j == 33)
+						nine.push(temp.charAt(j));
+				}
+			}
+		}
+		List<String> instructionsclean = new ArrayList<>();
+		for(int i = 0; i < instructions.size(); i++) {
+			String temp = instructions.get(i);
+			temp = temp.replace("move ", "");
+			temp = temp.replace("from ", "");
+			temp = temp.replace("to ", "");
+			instructionsclean.add(temp);
+		}
+		
+		for(int i = 0; i < instructionsclean.size(); i++) {
+			String temp = instructionsclean.get(i);
+			int move = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
+			int from = Integer.parseInt(temp.substring(temp.indexOf(' ')+1, temp.indexOf(' ')+2));
+			int to = Integer.parseInt(temp.substring(temp.indexOf(' ')+3, temp.length()));
+				
+			for(int m = 1; m <= move; m++) {
+				char chara = stackList.get(from-1).pop();
+				stackList.get(to-1).push(chara);
+			}
+		}
+
+		System.out.println("part one: " + stackList.get(0).peek() + " " + stackList.get(1).peek() + " " + stackList.get(2).peek()
+				 + " " + stackList.get(3).peek() + " " + stackList.get(4).peek() + " " + stackList.get(5).peek()
+				 + " " + stackList.get(6).peek() + " " + stackList.get(7).peek() + " " + stackList.get(8).peek());
+
+stackList.get(0).removeAllElements();
+		stackList.get(1).removeAllElements();
+		stackList.get(2).removeAllElements();
+		stackList.get(3).removeAllElements();
+		stackList.get(4).removeAllElements();
+		stackList.get(5).removeAllElements();
+		stackList.get(6).removeAllElements();
+		stackList.get(7).removeAllElements();
+		stackList.get(8).removeAllElements();
+		
+		for(int i = crates.size()-1; i >= 0; i--) {
+			String temp = crates.get(i);
+			for(int j = 0; j <= temp.length()-1; j++) {
+				if(Character.isAlphabetic(temp.charAt(j)) && !Character.isDigit(temp.charAt(j))) {
+					if(j == 1)
+						one.push(temp.charAt(j));
+					else if(j == 5)
+						two.push(temp.charAt(j));
+					else if(j == 9)
+						three.push(temp.charAt(j));
+					else if(j == 13)
+						four.push(temp.charAt(j));
+					else if(j == 17)
+						five.push(temp.charAt(j));
+					else if(j == 21)
+						six.push(temp.charAt(j));
+					else if(j == 25)
+						seven.push(temp.charAt(j));
+					else if(j == 29)
+						eight.push(temp.charAt(j));
+					else if(j == 33)
+						nine.push(temp.charAt(j));
+				}
+			}
+		}
+		for(int i = 0; i < instructionsclean.size(); i++) {
+			String temp = instructionsclean.get(i);
+			int move = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
+			int from = Integer.parseInt(temp.substring(temp.indexOf(' ')+1, temp.indexOf(' ')+2));
+			int to = Integer.parseInt(temp.substring(temp.indexOf(' ')+3, temp.length()));
+			List<Character> tempList = new ArrayList<>();
+			for(int m = 1; m <= move; m++) {
+				char chara = stackList.get(from-1).remove(stackList.get(from-1).size()-1);
+				tempList.add(chara);
+			}
+			for(int k = tempList.size()-1; k >= 0; k--) 	
+				stackList.get(to-1).push(tempList.get(k));
+			tempList.clear();
+		}
+		System.out.println("part two: " + stackList.get(0).peek() + " " + stackList.get(1).peek() + " " + stackList.get(2).peek()
+				 + " " + stackList.get(3).peek() + " " + stackList.get(4).peek() + " " + stackList.get(5).peek()
+				 + " " + stackList.get(6).peek() + " " + stackList.get(7).peek() + " " + stackList.get(8).peek());
+	}
+}
