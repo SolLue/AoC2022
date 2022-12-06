@@ -1,0 +1,75 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class DaySix {
+	public static void main(String[] args) {
+		String input = "";
+
+		try {  
+			File file = new File("C:\\AoC 22\\inputDay6.txt");
+			FileReader filereader = new FileReader(file);
+			BufferedReader bufferedreader = new BufferedReader(filereader);
+			String line;  
+			while((line = bufferedreader.readLine()) != null) {  
+				input = line;
+			}
+			filereader.close();
+		} catch(IOException e) { 
+			e.printStackTrace();
+		}
+
+		/*
+		 * signal based communication systems 
+		 * needs to lock on to their signal -> seemingly random characters
+		 * protocol: start of packet is a sequence of 4 characters that are all different
+		 * first position: start of packet
+		 * needs to report the number of characters from the beginning of the buffer to the end of the first 
+		 * 	such four character marker 
+		 */
+		Queue<Character> que = new LinkedList<>();
+		int counter = 0;
+
+		for(int i = 0; i < input.length(); i++) {
+			if(que.size() != 4) {
+				if(!que.contains(input.charAt(i))) {
+					counter++;
+					que.add(input.charAt(i));
+				} else {
+					while(que.contains(input.charAt(i))) {
+						que.poll();
+					}
+					que.add(input.charAt(i));
+					counter++;
+				}	
+			}
+		}
+		System.out.println("Part one: " + counter + " queue: " + que);
+
+		/*
+		 * start of message after 14 distinct characters instead of 4
+		 */
+		Queue<Character> queTwo = new LinkedList<>();
+		int counterTwo = 0;
+
+		for(int i = 0; i < input.length(); i++) {
+			if(queTwo.size() != 14) {
+				if(!queTwo.contains(input.charAt(i))) {
+					counterTwo++;
+					queTwo.add(input.charAt(i));
+				} else {
+					while(queTwo.contains(input.charAt(i))) {
+						queTwo.poll();
+					}
+					queTwo.add(input.charAt(i));
+					counterTwo++;
+				}	
+			}
+		}
+		System.out.println("Part two: " + counterTwo + " queue: " + queTwo);
+	}
+}
+
