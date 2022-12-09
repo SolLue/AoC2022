@@ -1,0 +1,100 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DayNine {
+	public static void main(String[] args) {
+
+		List<String> bridge = new ArrayList<>();
+		try {  
+			File file = new File("C:\\AoC 22\\inputDay9.txt");
+			FileReader filereader = new FileReader(file);
+			BufferedReader bufferedreader = new BufferedReader(filereader);
+			String line;  
+			while((line = bufferedreader.readLine()) != null) {  
+				bridge.add(line);
+			}
+			filereader.close();
+		} catch(IOException e) { 
+			e.printStackTrace();
+		}
+		/*
+		 * H head, T tail, must always be touching, diagonally adjacent and overlapping count too
+		 * if head is too far away, tail will move diagonally  (if not in the same row or column)
+		 * R right, L left, U up, D down
+		 * after every step the head takes the tail needs to be updated if it means the head is no longer next to the tail
+		 * count every position the tail visited at least once  
+		 */
+	
+		int headV = 0;
+		int tailV = 0;
+		int headH = 0;
+		int tailH = 0;		
+		List<String> visitedGrid = new ArrayList<>();
+		visitedGrid.add("0 0");
+
+		for(int i = 0; i < bridge.size(); i++) {
+			if(bridge.get(i).contains("R")) {
+				for(int j = 0; j < Integer.parseInt(bridge.get(i).substring(2)); j++) {
+					headH++;
+					if((Math.abs(headH - tailH)) > 1 && (headV == tailV)) {
+						tailH++;
+						visitedGrid.add(tailH + " " + tailV);
+					}else if(((Math.abs(headH - tailH)) + (Math.abs(headV - tailV)) > 2)) {
+
+						tailH++;
+						tailV = headV;
+						visitedGrid.add(tailH + " " + tailV);
+					}
+				}
+			} else if(bridge.get(i).contains("L")) {
+				for(int j = 0; j < Integer.parseInt(bridge.get(i).substring(2)); j++) {
+					headH--;
+					if((Math.abs(headH - tailH)) > 1 && (headV == tailV)) {
+						tailH--;
+						visitedGrid.add(tailH + " " + tailV);
+					}else if(((Math.abs(headH - tailH)) + (Math.abs(headV - tailV)) > 2)) {
+						tailH--;
+						tailV = headV;
+						visitedGrid.add(tailH + " " + tailV);
+					}
+				}
+			} else if(bridge.get(i).contains("D")) {
+				for(int j = 0; j < Integer.parseInt(bridge.get(i).substring(2)); j++) {
+					headV--;
+					if((Math.abs(headV - tailV)) > 1 && (headH == tailH)) {
+						tailV--;
+						visitedGrid.add(tailH + " " + tailV);
+					}else if(((Math.abs(headH - tailH)) + (Math.abs(headV - tailV)) > 2)) {
+						tailH = headH;
+						tailV--;
+						visitedGrid.add(tailH + " " + tailV);
+					}
+				}
+			} else if(bridge.get(i).contains("U")) {
+				for(int j = 0; j < Integer.parseInt(bridge.get(i).substring(2)); j++) {
+					headV++;
+					if((Math.abs(headV - tailV)) > 1 && (headH == tailH)) {
+						tailV++;
+						visitedGrid.add(tailH + " " + tailV);
+					}else if(((Math.abs(headH - tailH)) + (Math.abs(headV - tailV)) > 2)) {
+						tailH = headH;
+						tailV++;
+						visitedGrid.add(tailH + " " + tailV);
+					}
+				}
+			}
+		}
+		
+		List<String> confusion = new ArrayList<>();
+		for(int i = 0; i < visitedGrid.size(); i++) {
+			if(!confusion.contains(visitedGrid.get(i)))
+				confusion.add(visitedGrid.get(i));
+		}
+		
+		System.out.print("part 1: "+ confusion.size());	
+	}
+}
